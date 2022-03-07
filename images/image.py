@@ -43,6 +43,6 @@ class Image:
         elif method == 'orb':
             descriptor = cv2.ORB_create()
 
-        keypoints, features = descriptor.detectAndCompute(self.image, None)
+        keypoints, features = descriptor.detectAndCompute(cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY), None)
         self.keypoints = keypoints
         self.features = features

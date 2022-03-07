@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 from images import Image
 from rendering.utils import get_new_parameters, single_weights_matrix
 
-def brute_force_blend(images,pair_match) :
+def brute_force_blend(images,pair_match,wt1=0.5,wt2=0.5) :
     """
     Brute force
     """
@@ -33,7 +33,7 @@ def brute_force_blend(images,pair_match) :
     left = result_left*~temp.astype(bool)
     right = result*~temp.astype(bool)
 
-    ans = (left + (0.5* loverlap + 0.5 * roverlap) + right).astype('uint8')
+    ans = (left + (wt1* loverlap + wt2 * roverlap) + right).astype('uint8')
     kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(3,3))
     ans = cv2.dilate(ans,kernel,iterations = 1)
 

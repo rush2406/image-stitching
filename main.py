@@ -1,4 +1,5 @@
 import cv2
+from skimage import exposure
 import numpy as np
 from images import Image
 from typing import List
@@ -8,10 +9,9 @@ import imageio
 from matching import MultiImageMatches, PairMatch, build_homographies, find_connected_components
 from rendering import multi_band_blending, set_gain_compensations, simple_blending,brute_force_blend
 
-
 def hist_match(source, template):
     """
-    Adjust the pixel values of a grayscale image such that its histogram
+    Adjust the pixel values such that its histogram
     matches that of a target image
 
     Arguments:
@@ -51,23 +51,13 @@ def hist_match(source, template):
 
     return interp_t_values[bin_idx].reshape(oldshape)
 
-# read images and transform them to grayscale
 
-# img1 = imageio.imread('/home/rushali/CV702_Assignment/Project/image pairs_02_01.png')
-# img2 = imageio.imread('/home/rushali/CV702_Assignment/Project/image pairs_02_02.png')
-
-# source = img1
-# template = img2
-
-# matched = hist_match(source, template)
-# img2 = matched.astype('uint8')
-
-# img1 = img1[:,:,:3]
-# img2 = img2[:,:,:3]
-
+#left image
 image1 = Image('/home/rushali/CV702_Assignment/Project/image pairs_02_02.png')
+#right image
 image2 = Image('/home/rushali/CV702_Assignment/Project/image pairs_02_01.png')
 
+image1.image = hist_match(image1.image,image2.image).astype('uint8')
 
 images = [image1,image2]
 
@@ -81,10 +71,6 @@ for image in images:
 
 matcher = MultiImageMatches(images)
 pair_match = matcher.get_pair_matches()
-
-
-#plt.imshow(pair_match.image_a.image)
-#plt.show()
 
 
 build_homographies(pair_match)
@@ -109,5 +95,5 @@ cv2.imwrite(os.path.join("./", "results", f"pano_brute_force.jpg"), result_brute
 result_simple_blend = simple_blending(images,pair_match)
 cv2.imwrite(os.path.join("./", "results", f"pano_simple_blend.jpg"), result_simple_blend)
 
-result_multi_band_blend = multi_band_blending(images, num_bands=10, sigma=0.1)
+result_multi_band_blend = multi_band_blending(images, num_bands=4, sigma=0.1)
 cv2.imwrite(os.path.join("./", "results", f"pano_multi_band_blend.jpg"), result_multi_band_blend)
