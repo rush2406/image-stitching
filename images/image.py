@@ -40,7 +40,7 @@ class Image:
             descriptor = cv2.SIFT_create()
         elif method == 'brisk':
             descriptor = cv2.BRISK_create()
-        elif method == 'orb':
+        else:
             descriptor = cv2.ORB_create()
 
         keypoints, features = descriptor.detectAndCompute(cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY), None)
