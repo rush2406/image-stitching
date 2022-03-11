@@ -65,21 +65,7 @@ class MultiImageMatches:
         matches : List
             Matches between image_a and image_b.
         """
-
-        # bf = self.createMatcher(crossCheck=False)
-        # # compute the raw matches and initialize the list of actual matches
-        # rawMatches = bf.knnMatch(image_a.features, image_b.features, 2)
-        # print("Raw matches (knn):", len(rawMatches))
-        # matches = []
-
-        # # loop over the raw matches
-        # for m,n in rawMatches:
-        #     # ensure the distance is within a certain ratio of each
-        #     # other (i.e. Lowe's ratio test)
-        #     if m.distance < n.distance * self.ratio:
-        #         matches.append(m)
-        # return matches
-
+        
         matcher = cv2.DescriptorMatcher_create("BruteForce")
         matches = []
 
